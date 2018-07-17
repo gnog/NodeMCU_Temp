@@ -4,15 +4,21 @@ DHTesp dht;
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(74880);
+  delay(100);
   Serial.println();
-  Serial.println("Status\tHumidity (%)\tTemperature (C)\t(F)\tHeatIndex (C)\t(F)");
+  Serial.println("Good morning");
 
-  dht.setup(17); // Connect DHT sensor to GPIO 17
+  dht.setup(2); // Connect DHT sensor to GPIO 2 (Pin D4)
 }
 
 void loop()
 {
+  int feuchtVal = analogRead (A0);
+  Serial.print("Feutigkeitsmesser: ");
+  Serial.print(feuchtVal);
+  Serial.print("\t");
+  
   delay(dht.getMinimumSamplingPeriod());
 
   float humidity = dht.getHumidity();
@@ -22,12 +28,8 @@ void loop()
   Serial.print("\t");
   Serial.print(humidity, 1);
   Serial.print("\t\t");
-  Serial.print(temperature, 1);
-  Serial.print("\t\t");
-  Serial.print(dht.toFahrenheit(temperature), 1);
-  Serial.print("\t\t");
-  Serial.print(dht.computeHeatIndex(temperature, humidity, false), 1);
-  Serial.print("\t\t");
-  Serial.println(dht.computeHeatIndex(dht.toFahrenheit(temperature), humidity, true), 1);
+  Serial.println(temperature, 1);
+  Serial.println("Sleeping");
+  ESP.deepSleep(20e6);
 }
 
